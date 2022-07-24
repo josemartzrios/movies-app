@@ -26,7 +26,7 @@
         </form>
     </header>
 
-    <!-- HEADER -->
+
 
     <!-- SECTION TRENDING -->
    <section id="trendingPreview" class="trendingPreview-container">
@@ -35,16 +35,18 @@
             <button class="trendingPreview-btn">Ver más</button>
         </div>
 
+        <!-- DEJO ESTE ARTICLE POR EL PEDO DEL DOM QUE HICE EN MI FUNCION
+            getTrendingPreview()-->
         <article class="trendingPreview-movieList">
-            <div class="movie-container">
+            <!-- <div class="movie-container">
                 <img
                     src="https://image.tmdb.org/t/p/w300/adOzdWS35KAo21r9R4BuFCkLer6.jpg"
                     class="movie-img"
                     alt="Nombre de la película"
                 />
-            </div>
+            </div> -->
 
-            <div class="movie-container">
+            <!-- <div class="movie-container">
                 <img
                     src="https://image.tmdb.org/t/p/w300/adOzdWS35KAo21r9R4BuFCkLer6.jpg"
                     class="movie-img"
@@ -58,8 +60,8 @@
                 class="movie-img"
                 alt="Nombre de la película"
                 />
-            </div>
-        </article>
+            </div> -->
+        </article> 
     </section>
 
     <!-- SECTION CATEGORIES -->
@@ -77,6 +79,10 @@
 
             <div class="category-container">
                 <h3 id="id14" class="category-title">Acción</h3>
+            </div>
+
+            <div class="category-container">
+                <h3 id="id32" class="category-title">Comedia</h3>
             </div>
         </article>
     </section>
@@ -163,7 +169,7 @@
 
     <footer>Proyecto de Platzi creado por José Martínez Ríos</footer>
     
-    <script src="./src/main.js"></script>
+    <script type="module" src="./src/main.js"></script>
     <script src="./src/secret.js"></script>
 </body>
 </html>
