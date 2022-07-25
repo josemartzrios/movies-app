@@ -1,7 +1,20 @@
 import { API_KEY } from "./secret.js";
 
 
-async function getTrendingPreview(){
+// trabajo con axios para hacer mas limpia mi peticion
+// agregue un script en HTML para poder utilizar AXIOS
+const api = axios.create({
+    baseURL: 'https://api.themoviedb.org/3/',
+    headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+    },
+    params: {
+        'api_key': API_KEY,
+    }, 
+});
+
+// PETICIÓN SIN AXIOS
+export async function getTrendingPreview(){
     const res = await fetch('https://api.themoviedb.org/3/trending/movie/day?api_key=' + API_KEY);
     const data = await res.json();
 
@@ -12,7 +25,7 @@ async function getTrendingPreview(){
     // recrear el HTML de trending para imprimir datos en pantalla
     movies.forEach(movie => {
 
-        const trendingPreviewMoviesContainer = document.querySelector(
+        const trendingMoviesPreviewList = document.querySelector(
         '#trendingPreview .trendingPreview-movieList');
 
         // creo mi div MovieContainer 
@@ -33,9 +46,35 @@ async function getTrendingPreview(){
         // mi otro elemento movieImg ya con sus atributos
         movieContainer.appendChild(movieImg);
 
-        trendingPreviewMoviesContainer.appendChild(movieContainer);
+        trendingMoviesPreviewList.appendChild(movieContainer);
     });
-
 }
 
-getTrendingPreview();
+
+// PETICIÓN CON AXIOS
+export async function getTCategoriesPreview(){
+    const { data } = await api('genre/movie/list');
+
+    const categories = data.genres;
+   
+    categories.forEach(category => {
+
+        const categoriesPreviewList = document.querySelector(
+        '#categoriesPreview .categoriesPreview-list');
+
+        
+        const categoryContainer = document.createElement('div');
+        categoryContainer.classList.add('category-container');
+
+       
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.classList.add('category-title');
+        categoryTitle.setAttribute('id', 'id' + category.id);
+        const categoryTitleText = document.createTextNode(category.name);
+
+        categoryTitle.appendChild(categoryTitleText);
+        categoryContainer.appendChild(categoryTitle);
+        categoriesPreviewList.appendChild(categoryContainer);   
+    });
+}
+
