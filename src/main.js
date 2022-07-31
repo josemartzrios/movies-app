@@ -1,5 +1,5 @@
 import { API_KEY } from "./secret.js";
-
+import * as node from "./nodes.js";
 
 // trabajo con axios para hacer mas limpia mi peticion
 // agregue un script en HTML para poder utilizar AXIOS
@@ -48,6 +48,7 @@ export async function getTrendingPreview(){
 
         trendingMoviesPreviewList.appendChild(movieContainer);
     });
+
 }
 
 
@@ -59,10 +60,10 @@ export async function getTCategoriesPreview(){
    
     categories.forEach(category => {
 
+
         const categoriesPreviewList = document.querySelector(
         '#categoriesPreview .categoriesPreview-list');
 
-        
         const categoryContainer = document.createElement('div');
         categoryContainer.classList.add('category-container');
 
@@ -76,5 +77,6 @@ export async function getTCategoriesPreview(){
         categoryContainer.appendChild(categoryTitle);
         categoriesPreviewList.appendChild(categoryContainer);   
     });
+
 }
 
