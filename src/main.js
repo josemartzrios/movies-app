@@ -1,5 +1,6 @@
 import { API_KEY } from "./secret.js";
 import * as node from "./nodes.js";
+import { query } from "./navigation.js";
 
 // trabajo con axios para hacer mas limpia mi peticion
 // agregue un script en HTML para poder utilizar AXIOS
@@ -13,20 +14,14 @@ const api = axios.create({
     }, 
 });
 
-// PETICIÓN SIN AXIOS
-export async function getTrendingPreview(){
-    const res = await fetch('https://api.themoviedb.org/3/trending/movie/day?api_key=' + API_KEY);
-    const data = await res.json();
+// funciones para no repetir código
 
-    const movies = data.results;
-    // console.log({ data, movies })
+function createMovies(movies, container){
+    container.innerHTML = '';
 
     // vamos a recorrer cada movie y 
     // recrear el HTML de trending para imprimir datos en pantalla
     movies.forEach(movie => {
-
-        const trendingMoviesPreviewList = document.querySelector(
-        '#trendingPreview .trendingPreview-movieList');
 
         // creo mi div MovieContainer 
         // y le agrego su clase 'movie-container'
@@ -46,37 +41,73 @@ export async function getTrendingPreview(){
         // mi otro elemento movieImg ya con sus atributos
         movieContainer.appendChild(movieImg);
 
-        trendingMoviesPreviewList.appendChild(movieContainer);
+        container.appendChild(movieContainer);
     });
-
 }
 
+function createCategories(categories, container){
+    container.innerHTML = "";
+
+    categories.forEach(category => {
+
+        const categoryContainer = document.createElement('div');
+        categoryContainer.classList.add('category-container');
+
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.classList.add('category-title');
+        categoryTitle.setAttribute('id', 'id' + category.id);
+        categoryTitle.addEventListener('click', () => {
+            location.hash = '#category=' + category.id + '-' + category.name;
+        })
+        const categoryTitleText = document.createTextNode(category.name);
+
+        categoryTitle.appendChild(categoryTitleText);
+        categoryContainer.appendChild(categoryTitle);
+        container.appendChild(categoryContainer);   
+    });
+}
+
+// PETICIÓN SIN AXIOS
+export async function getTrendingPreview(){
+    const res = await fetch('https://api.themoviedb.org/3/trending/movie/day?api_key=' + API_KEY);
+    const data = await res.json();
+
+    const movies = data.results;
+
+    createMovies(movies, node.trendingMoviesPreviewList);
+}
 
 // PETICIÓN CON AXIOS
 export async function getTCategoriesPreview(){
     const { data } = await api('genre/movie/list');
 
     const categories = data.genres;
-   
-    categories.forEach(category => {
 
+    createCategories(categories, node.categoriesPreviewList);
 
-        const categoriesPreviewList = document.querySelector(
-        '#categoriesPreview .categoriesPreview-list');
+}
 
-        const categoryContainer = document.createElement('div');
-        categoryContainer.classList.add('category-container');
-
-       
-        const categoryTitle = document.createElement('h3');
-        categoryTitle.classList.add('category-title');
-        categoryTitle.setAttribute('id', 'id' + category.id);
-        const categoryTitleText = document.createTextNode(category.name);
-
-        categoryTitle.appendChild(categoryTitleText);
-        categoryContainer.appendChild(categoryTitle);
-        categoriesPreviewList.appendChild(categoryContainer);   
+export async function getMoviesByCategory(id){
+    const { data } = await api('discover/movie', {
+        params: {
+            with_genres: id,
+        }
     });
+    const movies = data.results;
 
+    createMovies(movies, node.genericSection);
+
+}
+
+// HAY ERROR AQUI, CLASE 13
+export async function getMoviesBySearch(query) {
+  const { data } = await api('search/movie', {
+    params: {
+      query,
+    },
+  });
+  const movies = data.results;
+
+  createMovies(movies, node.genericSection);
 }
 
