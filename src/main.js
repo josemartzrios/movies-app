@@ -149,5 +149,5 @@ export async function getMoviesBySearch(query) {
   });
   const movies = data.results;
 
-  createMovies(movies, genericSection);
+  createMovies(movies, node.genericSection);
 }
