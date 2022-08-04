@@ -1,6 +1,6 @@
 import { API_KEY } from "./secret.js";
 import * as node from "./nodes.js";
-import { query } from "./navigation.js";
+
 
 // trabajo con axios para hacer mas limpia mi peticion
 // agregue un script en HTML para poder utilizar AXIOS
@@ -27,6 +27,9 @@ function createMovies(movies, container){
         // y le agrego su clase 'movie-container'
         const movieContainer = document.createElement('div');
         movieContainer.classList.add('movie-container');
+        movieContainer.addEventListener('click', () => {
+            location.hash = '#movie=' + movie.id;
+        });
 
         // creo mi elemento img y le agrega su clase 'movie-img';
         const movieImg = document.createElement('img');
@@ -99,15 +102,54 @@ export async function getMoviesByCategory(id){
 
 }
 
-// HAY ERROR AQUI, CLASE 13
-export async function getMoviesBySearch(query) {
-  const { data } = await api('search/movie', {
-    params: {
-      query,
-    },
-  });
-  const movies = data.results;
+export async function getTrendingMovies(){
+    const { data } = await api('trending/movie/day');
+    const movies = data.results;
 
-  createMovies(movies, node.genericSection);
+    createMovies(movies, node.genericSection);
 }
+
+export async function getMovieById(id){
+    const { data: movie } = await api('movie/' + id);
+
+    const movieImgUrl = 'https://image.tmdb.org/t/p/w500/' + movie.poster_path;
+    node.headerSection.style.background =  `
+    
+    linear-gradient(
+        180deg, 
+        rgba(0, 0, 0, 0.35) 19.27%, 
+        rgba(0, 0, 0, 0) 29.17%
+        ), 
+        url(${movieImgUrl})
+    `;
+
+
+    node.movieDetailTitle.textContent = movie.title;
+    node.movieDetailDescription.textContent = movie.overview;
+    node.movieDetailScore.textContent = movie.vote_average;
+
+    createCategories(movie.genres, node.movieDetailCategoriesList);
+
+    getRelatedMoviesId(id);
+}
+
+export async function getRelatedMoviesId(id){
+    const { data } = await api(`movie/${id}/similar`);
+    const relatedMovies = data.results;
+
+    createMovies(relatedMovies, node.relatedMoviesContainer);
+    node.relatedMoviesContainer.scrollTo(0, 0);
+}
+
+// // HAY ERROR AQUI, CLASE 13
+// export async function getMoviesBySearch(query) {
+//   const { data } = await api('search/movie', {
+//     params: {
+//       query,
+//     },
+//   });
+//   const movies = data.results;
+
+//   createMovies(movies, node.genericSection);
+// }
 

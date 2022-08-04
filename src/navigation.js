@@ -1,4 +1,4 @@
-import { getTCategoriesPreview, getTrendingPreview, getMoviesByCategory, getMoviesBySearch} from "./main.js";
+import { getTCategoriesPreview, getTrendingPreview, getMoviesByCategory, getTrendingMovies, getMovieById } from "./main.js";
 import * as node from "./nodes.js";
 
 node.searchFormBtn.addEventListener('click', () => {
@@ -10,7 +10,11 @@ node.trendingBtn.addEventListener('click', () => {
 });
 
 node.arrowBtn.addEventListener('click', () => {
-    location.hash = '#home=';
+    if(document.domain !== 'localhost'){
+        location.hash = '#home';
+    } else {
+        history.back();
+    }
     // location.reload();
 });
 
@@ -103,8 +107,8 @@ function movieDetailsPage(){
     node.genericSection.classList.add('inactive');
     node.movieDetailSection.classList.remove('inactive');
 
-
-    console.log('Movies babyy');
+    const [_, movieId] = location.hash.split('=');
+    getMovieById(movieId);
 }
 
 function searchPage(){
@@ -123,8 +127,9 @@ function searchPage(){
     node.genericSection.classList.remove('inactive');
     node.movieDetailSection.classList.add('inactive');
 
+    // ['#search', 'buscador']
     const [_, query] = location.hash.split('=');
-    getMoviesBySearch(query);
+    // getMoviesBySearch(query);
 }
 
 function trendsPage(){
@@ -142,4 +147,8 @@ function trendsPage(){
     node.categoriesPreviewSection.classList.add('inactive');
     node.genericSection.classList.remove('inactive');
     node.movieDetailSection.classList.add('inactive');
+
+    node.headerCategoryTitle.innerHTML = 'Tendencias';
+
+    getTrendingMovies();
 }
