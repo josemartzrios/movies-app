@@ -141,15 +141,13 @@ export async function getRelatedMoviesId(id){
     node.relatedMoviesContainer.scrollTo(0, 0);
 }
 
-// // HAY ERROR AQUI, CLASE 13
-// export async function getMoviesBySearch(query) {
-//   const { data } = await api('search/movie', {
-//     params: {
-//       query,
-//     },
-//   });
-//   const movies = data.results;
+export async function getMoviesBySearch(query) {
+  const { data } = await api('search/movie', {
+    params: {
+      query,
+    },
+  });
+  const movies = data.results;
 
-//   createMovies(movies, node.genericSection);
-// }
-
+  createMovies(movies, genericSection);
+}

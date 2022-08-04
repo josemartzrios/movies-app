@@ -1,4 +1,4 @@
-import { getTCategoriesPreview, getTrendingPreview, getMoviesByCategory, getTrendingMovies, getMovieById } from "./main.js";
+import { getTCategoriesPreview, getTrendingPreview, getMoviesByCategory, getTrendingMovies, getMovieById, getMoviesBySearch } from "./main.js";
 import * as node from "./nodes.js";
 
 node.searchFormBtn.addEventListener('click', () => {
@@ -129,7 +129,7 @@ function searchPage(){
 
     // ['#search', 'buscador']
     const [_, query] = location.hash.split('=');
-    // getMoviesBySearch(query);
+    getMoviesBySearch(query);
 }
 
 function trendsPage(){
